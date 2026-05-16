@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>자미두수 — 별이 말하는 당신의 이야기</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600&family=Noto+Sans+KR:wght@300;400;500&family=IM+Fell+English+SC&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #1a1209;
+    --ink-mid: #3d2e12;
+    --ink-light: #6b5630;
+    --paper: #f7f0e3;
+    --paper-mid: #efe4cc;
+    --paper-dark: #dfd0b0;
+    --gold: #b8922a;
+    --gold-light: #d4aa4e;
+    --gold-pale: #f0dea0;
+    --red: #8b1a1a;
+    --red-light: #c0392b;
+    --teal: #1a5c58;
+    --teal-light: #2e8b84;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--ink);
+    color: var(--paper);
+    overflow-x: hidden;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 4rem 2rem;
+    background: radial-gradient(ellipse 80% 60% at 50% 40%, #2a1f08 0%, #0d0a04 70%, #050300 100%);
+    overflow: hidden;
+  }
+
+  /* Star field */
+  .stars {
+    position: absolute; inset: 0;
+    pointer-events: none;
+  }
+  .star {
+    position: absolute;
+    border-radius: 50%;
+    background: var(--gold-pale);
+    animation: twinkle var(--dur) ease-in-out infinite alternate;
+  }
+  @keyframes twinkle {
+    0%   { opacity: var(--op-lo); transform: scale(1); }
+    100% { opacity: var(--op-hi); transform: scale(1.5); }
+  }
+
+  /* Zodiac wheel bg */
+  .wheel-bg {
+    position: absolute;
+    width: 700px; height: 700px;
+    border: 1px solid rgba(184,146,42,0.12);
+    border-radius: 50%;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    animation: rotate 120s linear infinite;
+  }
+  .wheel-bg::before {
+    content: '';
+    position: absolute;
+    inset: 40px;
+    border: 1px solid rgba(184,146,42,0.08);
+    border-radius: 50%;
+  }
+  .wheel-bg::after {
+    content: '';
+    position: absolute;
+    inset: 100px;
+    border: 1px solid rgba(184,146,42,0.05);
+    border-radius: 50%;
+  }
+  @keyframes rotate { to { transform: translate(-50%, -50%) rotate(360deg); } }
+
+  .hero-badge {
+    font-family: 'IM Fell English SC', serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.3em;
+    color: var(--gold-light);
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.3s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 300;
+    font-size: clamp(3rem, 8vw, 6rem);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin-bottom: 0.5rem;
+    color: var(--gold-pale);
+    opacity: 0;
+    animation: fadeUp 0.8s 0.5s forwards;
+  }
+
+  .hero-title span {
+    display: block;
+    font-size: 0.35em;
+    letter-spacing: 0.25em;
+    color: var(--gold-light);
+    font-family: 'IM Fell English SC', serif;
+    margin-bottom: 0.5rem;
+  }
+
+  .hero-sub {
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 300;
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
+    color: rgba(240,222,160,0.7);
+    max-width: 560px;
+    line-height: 1.9;
+    margin: 1.5rem auto 2.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.7s forwards;
+  }
+
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 2.5rem;
+    background: var(--gold);
+    color: var(--ink);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    transition: all 0.3s;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.9s forwards;
+  }
+  .hero-cta:hover {
+    background: var(--gold-light);
+    transform: translateY(-2px);
+  }
+  .hero-cta-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 2.5rem;
+    background: transparent;
+    color: var(--gold-light);
+    border: 1px solid rgba(184,146,42,0.4);
+    font-size: 0.95rem;
+    font-weight: 400;
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    transition: all 0.3s;
+    opacity: 0;
+    animation: fadeUp 0.8s 1.0s forwards;
+  }
+  .hero-cta-secondary:hover { border-color: var(--gold); color: var(--gold-pale); }
+
+  .cta-group { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    color: rgba(184,146,42,0.4);
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    animation: bob 2s ease-in-out infinite;
+  }
+  @keyframes bob { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(6px)} }
+  .scroll-line {
+    width: 1px; height: 40px;
+    background: linear-gradient(to bottom, transparent, rgba(184,146,42,0.4));
+  }
+
+  /* ── SECTION BASE ── */
+  section { padding: 6rem 2rem; }
+
+  .container { max-width: 1100px; margin: 0 auto; }
+
+  .section-label {
+    font-family: 'IM Fell English SC', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.4em;
+    color: var(--gold);
+    margin-bottom: 0.75rem;
+    display: block;
+  }
+
+  .section-title {
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 300;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    line-height: 1.3;
+    color: var(--gold-pale);
+    margin-bottom: 1rem;
+  }
+
+  .section-desc {
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 300;
+    font-size: 1.05rem;
+    line-height: 2;
+    color: rgba(240,222,160,0.65);
+    max-width: 620px;
+  }
+
+  /* ── WHAT ── */
+  .what-section {
+    background: linear-gradient(180deg, #0d0a04 0%, #12100a 100%);
+    border-top: 1px solid rgba(184,146,42,0.1);
+  }
+
+  .what-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+    margin-top: 4rem;
+  }
+
+  .what-visual {
+    position: relative;
+    aspect-ratio: 1;
+    max-width: 420px;
+  }
+
+  /* 12궁 SVG 명반 */
+  .mingpan-svg { width: 100%; height: 100%; }
+
+  .what-points { display: flex; flex-direction: column; gap: 1.75rem; }
+
+  .what-point {
+    display: flex;
+    gap: 1.25rem;
+    align-items: flex-start;
+    padding: 1.25rem;
+    border: 1px solid rgba(184,146,42,0.12);
+    background: rgba(184,146,42,0.03);
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .what-point:hover {
+    border-color: rgba(184,146,42,0.3);
+    background: rgba(184,146,42,0.07);
+  }
+
+  .wp-num {
+    font-family: 'IM Fell English SC', serif;
+    font-size: 1.6rem;
+    color: var(--gold);
+    opacity: 0.5;
+    line-height: 1;
+    min-width: 2rem;
+  }
+  .wp-body {}
+  .wp-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--gold-light);
+    margin-bottom: 0.35rem;
+  }
+  .wp-desc {
+    font-size: 0.88rem;
+    line-height: 1.8;
+    color: rgba(240,222,160,0.6);
+  }
+
+  /* ── VS ── */
+  .vs-section {
+    background: #0a0906;
+    border-top: 1px solid rgba(184,146,42,0.08);
+  }
+
+  .vs-grid {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 0;
+    margin-top: 4rem;
+    align-items: stretch;
+  }
+
+  .vs-card {
+    padding: 2.5rem;
+    border: 1px solid rgba(184,146,42,0.12);
+  }
+  .vs-card.left { border-right: none; background: rgba(26,92,88,0.06); }
+  .vs-card.right { background: rgba(184,146,42,0.06); }
+
+  .vs-divider {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 1.5rem;
+    position: relative;
+  }
+  .vs-divider::before {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 1px;
+    background: rgba(184,146,42,0.12);
+  }
+  .vs-tag {
+    position: relative;
+    background: var(--ink);
+    border: 1px solid rgba(184,146,42,0.3);
+    color: var(--gold);
+    font-family: 'IM Fell English SC', serif;
+    font-size: 0.85rem;
+    padding: 0.5rem 1rem;
+    letter-spacing: 0.1em;
+  }
+
+  .vs-icon { font-size: 2rem; margin-bottom: 1rem; }
+  .vs-name {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 1.4rem;
+    font-weight: 300;
+    color: var(--gold-pale);
+    margin-bottom: 0.25rem;
+  }
+  .vs-sub {
+    font-size: 0.78rem;
+    color: rgba(240,222,160,0.4);
+    letter-spacing: 0.1em;
+    margin-bottom: 1.5rem;
+    font-family: 'IM Fell English SC', serif;
+  }
+  .vs-list { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; }
+  .vs-list li {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: rgba(240,222,160,0.65);
+    padding-left: 1rem;
+    position: relative;
+  }
+  .vs-list li::before {
+    content: '–';
+    position: absolute; left: 0;
+    color: var(--gold);
+    opacity: 0.5;
+  }
+
+  /* ── 12궁 ── */
+  .gong-section {
+    background: linear-gradient(180deg, #0a0906 0%, #0f0d07 100%);
+    border-top: 1px solid rgba(184,146,42,0.08);
+  }
+
+  .gong-intro { max-width: 640px; margin-bottom: 4rem; }
+
+  .gong-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1px;
+    background: rgba(184,146,42,0.08);
+    border: 1px solid rgba(184,146,42,0.08);
+  }
+
+  .gong-card {
+    background: #0a0906;
+    padding: 1.5rem 1.25rem;
+    transition: background 0.3s;
+    cursor: default;
+    position: relative;
+    overflow: hidden;
+  }
+  .gong-card::after {
+    content: attr(data-hanja);
+    position: absolute;
+    right: -0.5rem;
+    bottom: -1rem;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 4rem;
+    color: rgba(184,146,42,0.04);
+    line-height: 1;
+    pointer-events: none;
+    transition: color 0.3s;
+  }
+  .gong-card:hover { background: rgba(184,146,42,0.05); }
+  .gong-card:hover::after { color: rgba(184,146,42,0.08); }
+
+  .gong-icon { font-size: 1.4rem; margin-bottom: 0.75rem; }
+  .gong-name {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 1.05rem;
+    color: var(--gold-light);
+    margin-bottom: 0.3rem;
+  }
+  .gong-key {
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    opacity: 0.6;
+    margin-bottom: 0.6rem;
+    font-family: 'IM Fell English SC', serif;
+  }
+  .gong-desc {
+    font-size: 0.83rem;
+    line-height: 1.7;
+    color: rgba(240,222,160,0.5);
+  }
+
+  /* ── PROCESS ── */
+  .process-section {
+    background: #0d0b06;
+    border-top: 1px solid rgba(184,146,42,0.08);
+  }
+
+  .process-steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    margin-top: 4rem;
+    position: relative;
+  }
+  .process-steps::before {
+    content: '';
+    position: absolute;
+    top: 2.5rem;
+    left: 10%;
+    right: 10%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(184,146,42,0.3) 20%, rgba(184,146,42,0.3) 80%, transparent);
+  }
+
+  .process-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 0 1rem;
+    position: relative;
+  }
+
+  .ps-num {
+    width: 5rem;
+    height: 5rem;
+    border: 1px solid rgba(184,146,42,0.25);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'IM Fell English SC', serif;
+    font-size: 1.4rem;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 1;
+    background: #0d0b06;
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .process-step:hover .ps-num {
+    border-color: var(--gold);
+    background: rgba(184,146,42,0.08);
+  }
+
+  .ps-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 1rem;
+    color: var(--gold-light);
+    margin-bottom: 0.5rem;
+  }
+  .ps-desc {
+    font-size: 0.83rem;
+    line-height: 1.8;
+    color: rgba(240,222,160,0.5);
+  }
+
+  /* ── STARS ── */
+  .stars-section {
+    background: #0a0906;
+    border-top: 1px solid rgba(184,146,42,0.08);
+  }
+
+  .stars-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 3.5rem;
+  }
+
+  .star-group {
+    padding: 2rem 1.5rem;
+    border: 1px solid rgba(184,146,42,0.1);
+    position: relative;
+    overflow: hidden;
+  }
+  .star-group::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+  }
+  .star-group.main::before  { background: var(--gold); }
+  .star-group.lucky::before { background: var(--teal-light); }
+  .star-group.bad::before   { background: var(--red-light); }
+
+  .sg-label {
+    font-family: 'IM Fell English SC', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.3em;
+    margin-bottom: 0.75rem;
+    display: block;
+  }
+  .star-group.main  .sg-label { color: var(--gold); }
+  .star-group.lucky .sg-label { color: var(--teal-light); }
+  .star-group.bad   .sg-label { color: var(--red-light); }
+
+  .sg-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 1.1rem;
+    color: var(--gold-pale);
+    margin-bottom: 1rem;
+  }
+
+  .star-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+  }
+  .chip {
+    font-size: 0.78rem;
+    padding: 0.25rem 0.6rem;
+    border: 1px solid;
+    font-family: 'Noto Serif KR', serif;
+  }
+  .star-group.main  .chip { border-color: rgba(184,146,42,0.3); color: var(--gold-light); }
+  .star-group.lucky .chip { border-color: rgba(46,139,132,0.3); color: var(--teal-light); }
+  .star-group.bad   .chip { border-color: rgba(192,57,43,0.3);  color: #e57373; }
+
+  .sg-desc {
+    font-size: 0.83rem;
+    line-height: 1.8;
+    color: rgba(240,222,160,0.5);
+  }
+
+  /* ── SIHUA ── */
+  .sihua-section {
+    background: #0f0d07;
+    border-top: 1px solid rgba(184,146,42,0.08);
+  }
+
+  .sihua-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    margin-top: 4rem;
+    background: rgba(184,146,42,0.08);
+  }
+
+  .sihua-card {
+    background: #0f0d07;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    transition: background 0.3s;
+  }
+  .sihua-card:hover { background: rgba(184,146,42,0.04); }
+
+  .sc-hanja {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+  .sc-name {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 1.05rem;
+    color: var(--gold-light);
+    margin-bottom: 0.25rem;
+  }
+  .sc-en {
+    font-family: 'IM Fell English SC', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    opacity: 0.5;
+    margin-bottom: 1rem;
+    display: block;
+  }
+  .sc-desc {
+    font-size: 0.83rem;
+    line-height: 1.8;
+    color: rgba(240,222,160,0.5);
+  }
+
+  /* ── TESTIMONIALS / SAMPLE ── */
+  .sample-section {
+    background: #0d0b06;
+    border-top: 1px solid rgba(184,146,42,0.08);
+  }
+
+  .sample-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 3.5rem;
+  }
+
+  .sample-card {
+    border: 1px solid rgba(184,146,42,0.12);
+    padding: 2rem;
+    position: relative;
+    transition: border-color 0.3s;
+  }
+  .sample-card:hover { border-color: rgba(184,146,42,0.3); }
+
+  .sc-quote {
+    font-size: 3rem;
+    color: var(--gold);
+    opacity: 0.15;
+    font-family: 'IM Fell English SC', serif;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+  .sc-text {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 0.9rem;
+    line-height: 1.9;
+    color: rgba(240,222,160,0.7);
+    margin-bottom: 1.5rem;
+  }
+  .sc-profile {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(184,146,42,0.1);
+  }
+  .sc-avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: rgba(184,146,42,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    color: var(--gold-light);
+    font-family: 'Noto Serif KR', serif;
+  }
+  .sc-name-txt {
+    font-size: 0.83rem;
+    color: rgba(240,222,160,0.5);
+    font-family: 'Noto Serif KR', serif;
+  }
+
+  /* ── CTA ── */
+  .cta-section {
+    background: linear-gradient(180deg, #0d0b06 0%, #050402 100%);
+    border-top: 1px solid rgba(184,146,42,0.1);
+    text-align: center;
+    padding: 8rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-section::before {
+    content: '紫微斗數';
+    position: absolute;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 18vw;
+    color: rgba(184,146,42,0.03);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  .cta-content { position: relative; z-index: 1; }
+
+  .cta-title {
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 300;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    color: var(--gold-pale);
+    margin-bottom: 1rem;
+  }
+  .cta-sub {
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 300;
+    font-size: 1.05rem;
+    line-height: 2;
+    color: rgba(240,222,160,0.55);
+    max-width: 500px;
+    margin: 0 auto 3rem;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #030201;
+    border-top: 1px solid rgba(184,146,42,0.08);
+    padding: 2.5rem 2rem;
+    text-align: center;
+  }
+  .footer-logo {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 1.2rem;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+  }
+  .footer-copy {
+    font-size: 0.78rem;
+    color: rgba(240,222,160,0.25);
+    line-height: 1.8;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 3rem;
+    transition: background 0.4s, border-color 0.4s;
+    border-bottom: 1px solid transparent;
+  }
+  nav.scrolled {
+    background: rgba(10, 9, 6, 0.92);
+    backdrop-filter: blur(12px);
+    border-color: rgba(184,146,42,0.1);
+  }
+
+  .nav-logo {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 1.2rem;
+    color: var(--gold-light);
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+  .nav-links a {
+    font-size: 0.83rem;
+    color: rgba(240,222,160,0.5);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    transition: color 0.2s;
+    font-family: 'Noto Serif KR', serif;
+  }
+  .nav-links a:hover { color: var(--gold-light); }
+
+  .nav-btn {
+    padding: 0.55rem 1.5rem;
+    background: transparent;
+    border: 1px solid rgba(184,146,42,0.35);
+    color: var(--gold-light);
+    font-size: 0.83rem;
+    cursor: pointer;
+    font-family: 'Noto Sans KR', sans-serif;
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+  .nav-btn:hover { background: rgba(184,146,42,0.1); border-color: var(--gold); }
+
+  /* divider */
+  .divider-line {
+    border: none;
+    height: 1px;
+    background: rgba(184,146,42,0.08);
+    margin: 0;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .what-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .what-visual { margin: 0 auto; max-width: 300px; }
+    .vs-grid { grid-template-columns: 1fr; }
+    .vs-divider { padding: 1.5rem 0; flex-direction: row; }
+    .vs-card.left { border-right: 1px solid rgba(184,146,42,0.12); border-bottom: none; }
+    .process-steps { grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .process-steps::before { display: none; }
+    .stars-layout { grid-template-columns: 1fr; }
+    .sihua-grid { grid-template-columns: 1fr 1fr; }
+    .sample-cards { grid-template-columns: 1fr; }
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">紫微斗數</a>
+  <ul class="nav-links">
+    <li><a href="#what">소개</a></li>
+    <li><a href="#gong">12궁</a></li>
+    <li><a href="#process">해석 과정</a></li>
+    <li><a href="#stars">성요</a></li>
+  </ul>
+  <a href="#cta" class="nav-btn">명반 분석 받기</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="stars" id="starfield"></div>
+  <div class="wheel-bg"></div>
+
+  <p class="hero-badge">Zi Wei Dou Shu · 紫微斗數</p>
+  <h1 class="hero-title">
+    <span>The Stars Know Your Story</span>
+    자미두수
+  </h1>
+  <p class="hero-sub">
+    북극성 자미성을 중심으로 108개의 별이 그리는<br>
+    오직 당신만을 위한 우주의 지도 —<br>
+    생년월일시에 담긴 당신의 이야기를 읽어드립니다
+  </p>
+  <div class="cta-group">
+    <a href="#cta" class="hero-cta">명반 분석 받기 →</a>
+    <a href="#what" class="hero-cta-secondary">자미두수란?</a>
+  </div>
+
+  <div class="scroll-hint">
+    <div class="scroll-line"></div>
+    SCROLL
+  </div>
+</section>
+
+<!-- WHAT -->
+<section class="what-section" id="what">
+  <div class="container">
+    <span class="section-label">What is Zi Wei Dou Shu</span>
+    <h2 class="section-title">사주명리보다 더 정밀한<br>별의 학문</h2>
+
+    <div class="what-grid">
+      <!-- 명반 도해 -->
+      <div class="what-visual">
+        <svg class="mingpan-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="bg-grad" cx="50%" cy="50%">
+              <stop offset="0%" stop-color="#1a1408"/>
+              <stop offset="100%" stop-color="#0a0804"/>
+            </radialGradient>
+          </defs>
+          <rect width="400" height="400" fill="url(#bg-grad)" stroke="rgba(184,146,42,0.2)" stroke-width="1"/>
+
+          <!-- 외부 테두리 -->
+          <rect x="10" y="10" width="380" height="380" fill="none" stroke="rgba(184,146,42,0.15)" stroke-width="0.5"/>
+
+          <!-- 격자 (4x4) -->
+          <!-- 가로선 -->
+          <line x1="10" y1="105" x2="390" y2="105" stroke="rgba(184,146,42,0.15)" stroke-width="0.5"/>
+          <line x1="10" y1="200" x2="390" y2="200" stroke="rgba(184,146,42,0.15)" stroke-width="0.5"/>
+          <line x1="10" y1="295" x2="390" y2="295" stroke="rgba(184,146,42,0.15)" stroke-width="0.5"/>
+          <!-- 세로선 -->
+          <line x1="105" y1="10" x2="105" y2="390" stroke="rgba(184,146,42,0.15)" stroke-width="0.5"/>
+          <line x1="200" y1="10" x2="200" y2="390" stroke="rgba(184,146,42,0.15)" stroke-width="0.5"/>
+          <line x1="295" y1="10" x2="295" y2="390" stroke="rgba(184,146,42,0.15)" stroke-width="0.5"/>
+
+          <!-- 중앙 사각형 (2x2 내부) -->
+          <rect x="105" y="105" width="190" height="190" fill="rgba(184,146,42,0.03)" stroke="rgba(184,146,42,0.2)" stroke-width="0.5"/>
+
+          <!-- 자미성 중앙 -->
+          <circle cx="200" cy="200" r="40" fill="none" stroke="rgba(184,146,42,0.25)" stroke-width="0.5"/>
+          <circle cx="200" cy="200" r="4" fill="rgba(184,146,42,0.8)"/>
+          <text x="200" y="185" text-anchor="middle" font-family="Noto Serif KR" font-size="9" fill="rgba(184,146,42,0.6)">紫微</text>
+          <text x="200" y="220" text-anchor="middle" font-family="Noto Serif KR" font-size="7" fill="rgba(184,146,42,0.35)">자미성</text>
+
+          <!-- 방사선 -->
+          <line x1="200" y1="160" x2="200" y2="105" stroke="rgba(184,146,42,0.1)" stroke-width="0.5" stroke-dasharray="3,3"/>
+          <line x1="240" y1="200" x2="295" y2="200" stroke="rgba(184,146,42,0.1)" stroke-width="0.5" stroke-dasharray="3,3"/>
+          <line x1="200" y1="240" x2="200" y2="295" stroke="rgba(184,146,42,0.1)" stroke-width="0.5" stroke-dasharray="3,3"/>
+          <line x1="160" y1="200" x2="105" y2="200" stroke="rgba(184,146,42,0.1)" stroke-width="0.5" stroke-dasharray="3,3"/>
+
+          <!-- 12궁 라벨 (바깥 칸들) -->
+          <!-- 상단 4칸 -->
+          <text x="57" y="45" text-anchor="middle" font-family="Noto Serif KR" font-size="9" fill="rgba(184,146,42,0.7)">명궁</text>
+          <text x="57" y="58" text-anchor="middle" font-family="Noto Serif KR" font-size="7" fill="rgba(184,146,42,0.35)">命宮</text>
+          <circle cx="57" cy="72" r="2" fill="rgba(184,146,42,0.5)"/>
+          <text x="57" y="82" text-anchor="middle" font-family="Noto Serif KR" font-size="6.5" fill="rgba(240,222,160,0.4)">자미·천기</text>
+
+          <text x="152" y="45" text-anchor="middle" font-family="Noto Serif KR" font-size="9" fill="rgba(184,146,42,0.7)">부모궁</text>
+          <text x="152" y="58" text-anchor="middle" font-family="Noto Serif KR" font-size="7" fill="rgba(184,146,42,0.35)">父母宮</text>
+
+          <text x="247" y="45" text-anchor="middle" font-family="Noto Serif KR" font-size="9" fill="rgba(184,146,42,0.7)">복덕궁</text>
+          <text x="247" y="58" text-anchor="middle" font-family="Noto Serif KR" font-size="7" fill="rgba(184,146,42,0.35)">福德宮</text>
+
+          <text x="342" y="45" text-anchor="middle" font-family="Noto Serif KR" font-size="9" fill="rgba(184,146,42,0.7)">전택궁</text>
+          <text x="342" y="58" text-anchor="middle" font-family="Noto Serif KR" font-size="7" fill="rgba(184,146,42,0.35)">田宅宮</text>
+
+          <!-- 우측 3칸 -->
+          <text x="342" y="142" text-anchor="middle" font-family="Noto Serif KR" font-size="9" fill="rgba(184,146,42,0.7)">관록궁</text>
+          <text x="342" y="155" text-anchor="middle" font-family="Noto Serif KR" font-size="7" fill="rgba(184,146,42,0.35)">官祿宮</text>
+
+          <text x="342" y="237" text-anchor="middle" font-family="Noto Serif KR" font-size="9" fill="rgba(46,139,132,0.8)">재백궁</text>
+          <text x="342" y="250" text-anchor="middle" font-family="Noto Serif KR" font-size="7" fill="rgba(46,139,132,0.4)">財帛宮</text>
+          <circle cx="342" cy="265" r="2" fill="rgba(46,139,132,0.5)"/>
+          <text x="342" y="275" text-anchor="middle" font-family="Noto Serif KR" font-size="6.5" fill="rgba(240,222,160,0.4)">태음·탐랑</text>
+
+          <text x="342" y="332" text-anchor="middle" font-family="Noto Serif KR" font-size="9" fill="rgba(184,146,42,0.7)">질액궁</text>
+          <text x="342" y="345" text-anchor="middle" font-family="Noto Serif KR" font-size="7" fill="rgba(184,146,42,0.35)">疾厄宮</text>
+
+          <!-- 하단 4칸 -->
+          <text x="57" y="332" text-anchor="middle" font-family="Noto Serif KR" font-size="9" fill="rgba(184,146,42,0.7)">형제궁</text>
+          <text x="57" y="345" text-anchor="middle" font-family="Noto Serif KR" font-size="7" fill="rgba(184,146,42,0.35)">兄弟宮</text>
+
+          <text x="152" y="332" text-anchor="middle" font-family="Noto Serif KR" font-size="9" fill="rgba(184,146,42,0.7)">부처궁</text>
+          <text x="152" y="345" text-anchor="middle" font-family="Noto Serif KR" font-size="7" fill="rgba(184,146,42,0.35)">夫妻宮</text>
+
+          <text x="247" y="332" text-anchor="middle" font-family="Noto Serif KR" font-size="9" fill="rgba(184,146,42,0.7)">자녀궁</text>
+          <text x="247" y="345" text-anchor="middle" font-family="Noto Serif KR" font-size="7" fill="rgba(184,146,42,0.35)">子女宮</text>
+
+          <text x="342" y="390" text-anchor="middle" font-family="Noto Serif KR" font-size="9" fill="rgba(184,146,42,0.7)">천이궁</text>
+
+          <!-- 좌측 3칸 -->
+          <text x="57" y="142" text-anchor="middle" font-family="Noto Serif KR" font-size="9" fill="rgba(184,146,42,0.7)">교우궁</text>
+          <text x="57" y="155" text-anchor="middle" font-family="Noto Serif KR" font-size="7" fill="rgba(184,146,42,0.35)">交友宮</text>
+
+          <text x="57" y="237" text-anchor="middle" font-family="Noto Serif KR" font-size="9" fill="rgba(184,146,42,0.7)">천이궁</text>
+          <text x="57" y="250" text-anchor="middle" font-family="Noto Serif KR" font-size="7" fill="rgba(184,146,42,0.35)">遷移宮</text>
+
+          <!-- 별 장식 -->
+          <circle cx="30" cy="30" r="1" fill="rgba(184,146,42,0.4)"/>
+          <circle cx="370" cy="30" r="1.5" fill="rgba(184,146,42,0.5)"/>
+          <circle cx="30" cy="370" r="1" fill="rgba(184,146,42,0.3)"/>
+          <circle cx="370" cy="370" r="1.5" fill="rgba(184,146,42,0.4)"/>
+          <circle cx="200" cy="25" r="1" fill="rgba(184,146,42,0.25)"/>
+          <circle cx="375" cy="200" r="1" fill="rgba(184,146,42,0.25)"/>
+        </svg>
+      </div>
+
+      <div class="what-points">
+        <div class="what-point">
+          <div class="wp-num">01</div>
+          <div class="wp-body">
+            <div class="wp-title">송나라 1000년의 지혜</div>
+            <div class="wp-desc">진희이 도사가 창안한 자미두수는 북극성 '자미성'을 중심으로 개인의 운명을 읽는 동양 최고의 추명술입니다. 1000년 이상 검증된 체계적 학문입니다.</div>
+          </div>
+        </div>
+        <div class="what-point">
+          <div class="wp-num">02</div>
+          <div class="wp-body">
+            <div class="wp-title">108개 별의 정밀한 배치</div>
+            <div class="wp-desc">생년월일시를 바탕으로 108개 이상의 별(성석)을 12개의 궁에 배치합니다. 별들의 위치와 조합이 당신의 성격, 운명, 길흉을 결정합니다.</div>
+          </div>
+        </div>
+        <div class="what-point">
+          <div class="wp-num">03</div>
+          <div class="wp-body">
+            <div class="wp-title">사주보다 구체적인 해석</div>
+            <div class="wp-desc">사주명리가 오행의 흐름을 보는 큰 그림이라면, 자미두수는 특정 시기의 심리·사건·환경을 세밀하게 읽어내는 돋보기입니다.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VS -->
+<section class="vs-section">
+  <div class="container">
+    <span class="section-label">Zi Wei vs. Four Pillars</span>
+    <h2 class="section-title">자미두수 vs 사주명리</h2>
+    <p class="section-desc">두 학문은 경쟁 관계가 아닌 상호 보완 관계입니다.<br>함께 보면 더욱 입체적인 해석이 가능합니다.</p>
+
+    <div class="vs-grid">
+      <div class="vs-card left">
+        <div class="vs-icon">☯</div>
+        <div class="vs-name">사주명리</div>
+        <div class="vs-sub">Four Pillars of Destiny</div>
+        <ul class="vs-list">
+          <li>연·월·일·시 4개 기둥, 음양오행 분석</li>
+          <li>인생의 전체 대운 흐름 파악에 강함</li>
+          <li>타고난 기운의 강약과 오행 균형</li>
+          <li>거시적이고 명확한 큰 그림 제공</li>
+          <li>한국에서 가장 친숙한 추명술</li>
+        </ul>
+      </div>
+
+      <div class="vs-divider">
+        <span class="vs-tag">VS</span>
+      </div>
+
+      <div class="vs-card right">
+        <div class="vs-icon">✦</div>
+        <div class="vs-name">자미두수</div>
+        <div class="vs-sub">Zi Wei Dou Shu</div>
+        <ul class="vs-list">
+          <li>108개 이상의 별, 12궁 배치 분석</li>
+          <li>특정 시기의 구체적 사건과 심리</li>
+          <li>대인관계, 적성, 세밀한 환경 변화</li>
+          <li>시각적 명반으로 직관적 이해 가능</li>
+          <li>사주의 모호한 부분을 보완·검증</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 12궁 -->
+<section class="gong-section" id="gong">
+  <div class="container">
+    <div class="gong-intro">
+      <span class="section-label">The Twelve Palaces</span>
+      <h2 class="section-title">12개의 궁<br>인생의 열두 무대</h2>
+      <p class="section-desc">자미두수 명반은 12개의 칸(궁)으로 이루어져 있으며, 각 궁은 인생의 특정 영역을 담당합니다. 어떤 별이 어느 궁에 자리하는지에 따라 해석이 달라집니다.</p>
+    </div>
+
+    <div class="gong-grid">
+      <div class="gong-card" data-hanja="命">
+        <div class="gong-icon">⬡</div>
+        <div class="gong-name">명궁 (命宮)</div>
+        <div class="gong-key">Life Palace</div>
+        <div class="gong-desc">나의 본질, 성향, 외모, 전반적인 운명의 그릇. 가장 중요한 핵심 궁.</div>
+      </div>
+      <div class="gong-card" data-hanja="財">
+        <div class="gong-icon">◈</div>
+        <div class="gong-name">재백궁 (財帛宮)</div>
+        <div class="gong-key">Wealth Palace</div>
+        <div class="gong-desc">재물복과 돈을 버는 방식, 재정 관리 능력, 부의 흐름.</div>
+      </div>
+      <div class="gong-card" data-hanja="官">
+        <div class="gong-icon">◇</div>
+        <div class="gong-name">관록궁 (官祿宮)</div>
+        <div class="gong-key">Career Palace</div>
+        <div class="gong-desc">직업, 사업, 사회적 성취와 명예. 커리어의 방향과 성공 여부.</div>
+      </div>
+      <div class="gong-card" data-hanja="夫">
+        <div class="gong-icon">◉</div>
+        <div class="gong-name">부처궁 (夫妻宮)</div>
+        <div class="gong-key">Spouse Palace</div>
+        <div class="gong-desc">배우자의 성향, 연애·결혼 생활의 질, 이상형의 특성.</div>
+      </div>
+      <div class="gong-card" data-hanja="福">
+        <div class="gong-icon">✦</div>
+        <div class="gong-name">복덕궁 (福德宮)</div>
+        <div class="gong-key">Spirit Palace</div>
+        <div class="gong-desc">정신적 행복, 타고난 복, 취미와 여가, 내면의 풍요로움.</div>
+      </div>
+      <div class="gong-card" data-hanja="遷">
+        <div class="gong-icon">◁</div>
+        <div class="gong-name">천이궁 (遷移宮)</div>
+        <div class="gong-key">Travel Palace</div>
+        <div class="gong-desc">사회활동, 이동, 해외 운수. 집 밖에서 맞이하는 운세.</div>
+      </div>
+      <div class="gong-card" data-hanja="疾">
+        <div class="gong-icon">○</div>
+        <div class="gong-name">질액궁 (疾厄宮)</div>
+        <div class="gong-key">Health Palace</div>
+        <div class="gong-desc">건강 상태, 주의해야 할 신체 부위, 사고·질병 경향.</div>
+      </div>
+      <div class="gong-card" data-hanja="田">
+        <div class="gong-icon">⬜</div>
+        <div class="gong-name">전택궁 (田宅宮)</div>
+        <div class="gong-key">Property Palace</div>
+        <div class="gong-desc">부동산 운, 집안 환경, 가정의 분위기와 재산 축적.</div>
+      </div>
+      <div class="gong-card" data-hanja="子">
+        <div class="gong-icon">◌</div>
+        <div class="gong-name">자녀궁 (子女宮)</div>
+        <div class="gong-key">Children Palace</div>
+        <div class="gong-desc">자녀와의 인연, 자녀의 성향, 생식 능력과 창조력.</div>
+      </div>
+      <div class="gong-card" data-hanja="交">
+        <div class="gong-icon">⟡</div>
+        <div class="gong-name">교우궁 (交友宮)</div>
+        <div class="gong-key">Friends Palace</div>
+        <div class="gong-desc">대인관계, 친구·동료와의 인연, 부하직원과의 관계.</div>
+      </div>
+      <div class="gong-card" data-hanja="兄">
+        <div class="gong-icon">△</div>
+        <div class="gong-name">형제궁 (兄弟宮)</div>
+        <div class="gong-key">Siblings Palace</div>
+        <div class="gong-desc">형제자매와의 인연과 관계, 동료·친구와의 경쟁.</div>
+      </div>
+      <div class="gong-card" data-hanja="父">
+        <div class="gong-icon">▽</div>
+        <div class="gong-name">부모궁 (父母宮)</div>
+        <div class="gong-key">Parents Palace</div>
+        <div class="gong-desc">부모와의 인연, 윗사람 관계, 학업과 명예 서류운.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="process-section" id="process">
+  <div class="container">
+    <span class="section-label">How We Read Your Chart</span>
+    <h2 class="section-title">명반 해석의 4단계</h2>
+    <p class="section-desc">복잡해 보이지만, 자미두수 해석은 명확한 단계를 따릅니다.<br>저희가 당신 대신 깊이 분석해 드립니다.</p>
+
+    <div class="process-steps">
+      <div class="process-step">
+        <div class="ps-num">I</div>
+        <div class="ps-title">명반 작성</div>
+        <div class="ps-desc">생년월일시를 입력하면 108개 별이 12궁에 자동 배치됩니다. 오직 당신만의 별자리 지도가 완성됩니다.</div>
+      </div>
+      <div class="process-step">
+        <div class="ps-num">II</div>
+        <div class="ps-title">주성 분석</div>
+        <div class="ps-desc">14개 주성이 어느 궁에 앉는지 파악합니다. 명궁·재백궁·관록궁을 중심으로 본질적 성향을 읽어냅니다.</div>
+      </div>
+      <div class="process-step">
+        <div class="ps-num">III</div>
+        <div class="ps-title">길흉 판단</div>
+        <div class="ps-desc">길성과 살성의 조화를 봅니다. 살성도 올바른 별과 만나면 전화위복의 큰 성공이 됩니다.</div>
+      </div>
+      <div class="process-step">
+        <div class="ps-num">IV</div>
+        <div class="ps-title">대운·소운 적용</div>
+        <div class="ps-desc">10년 대운과 1년 소운을 명반에 대입해 언제 어떤 일이 일어날지 시기별로 풀어드립니다.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STARS -->
+<section class="stars-section" id="stars">
+  <div class="container">
+    <span class="section-label">The Stars · 성요 (星曜)</span>
+    <h2 class="section-title">별들의 세계</h2>
+    <p class="section-desc">자미두수에는 100개가 넘는 별이 등장합니다. 각 별은 고유한 성격과 에너지를 가지며, 어느 궁에 자리하느냐에 따라 해석이 완전히 달라집니다.</p>
+
+    <div class="stars-layout">
+      <div class="star-group main">
+        <span class="sg-label">Main Stars · 주성</span>
+        <div class="sg-title">14개의 주성</div>
+        <div class="star-chips">
+          <span class="chip">자미</span><span class="chip">천기</span><span class="chip">태양</span>
+          <span class="chip">무곡</span><span class="chip">천동</span><span class="chip">염정</span>
+          <span class="chip">천부</span><span class="chip">태음</span><span class="chip">탐랑</span>
+          <span class="chip">거문</span><span class="chip">천상</span><span class="chip">천량</span>
+          <span class="chip">칠살</span><span class="chip">파군</span>
+        </div>
+        <div class="sg-desc">각 궁의 중심 사건을 주도하는 핵심 별입니다. 어떤 주성이 명궁에 자리하느냐에 따라 인생의 큰 방향이 결정됩니다.</div>
+      </div>
+
+      <div class="star-group lucky">
+        <span class="sg-label">Lucky Stars · 길성</span>
+        <div class="sg-title">능력을 발휘하는 별</div>
+        <div class="star-chips">
+          <span class="chip">보필</span><span class="chip">창곡</span>
+          <span class="chip">괴월</span><span class="chip">녹존</span>
+          <span class="chip">천마</span><span class="chip">우필</span>
+        </div>
+        <div class="sg-desc">인생에 도움을 주고 능력을 꽃피우게 하는 별입니다. 길성이 모이는 궁은 그 영역에서 재능이 발휘되고 순탄한 결과를 얻습니다.</div>
+      </div>
+
+      <div class="star-group bad">
+        <span class="sg-label">Challenging Stars · 살성</span>
+        <div class="sg-title">도전과 역경의 별</div>
+        <div class="star-chips">
+          <span class="chip">경양</span><span class="chip">타라</span>
+          <span class="chip">화성</span><span class="chip">영성</span>
+          <span class="chip">지겁</span><span class="chip">지공</span>
+        </div>
+        <div class="sg-desc">장애와 갈등을 의미하지만 무조건 나쁜 것이 아닙니다. 특정 주성과 만나거나 길성이 제어하면 오히려 큰 성공의 동력이 됩니다.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 사화 -->
+<section class="sihua-section">
+  <div class="container">
+    <span class="section-label">The Four Transformations · 사화 (四化)</span>
+    <h2 class="section-title">운명을 바꾸는<br>네 가지 에너지</h2>
+    <p class="section-desc">태어난 연도의 천간에 따라 4가지 변화 에너지(사화)가 별에 부여됩니다. 같은 별이라도 사화에 따라 전혀 다른 의미로 해석됩니다.</p>
+
+    <div class="sihua-grid">
+      <div class="sihua-card">
+        <span class="sc-hanja" style="color: rgba(184,146,42,0.8);">祿</span>
+        <div class="sc-name">화록 (化祿)</div>
+        <span class="sc-en">Prosperity</span>
+        <div class="sc-desc">재물과 행운의 에너지. 해당 별이 위치한 궁의 영역에서 풍요와 기회가 열립니다.</div>
+      </div>
+      <div class="sihua-card">
+        <span class="sc-hanja" style="color: rgba(46,139,132,0.8);">權</span>
+        <div class="sc-name">화권 (化權)</div>
+        <span class="sc-en">Authority</span>
+        <div class="sc-desc">권력과 리더십의 에너지. 경쟁에서 이기고 주도권을 잡는 힘을 부여합니다.</div>
+      </div>
+      <div class="sihua-card">
+        <span class="sc-hanja" style="color: rgba(139,90,26,0.8);">科</span>
+        <div class="sc-name">화과 (化科)</div>
+        <span class="sc-en">Status</span>
+        <div class="sc-desc">학문과 명예의 에너지. 지식·예술·자격증에서 두각을 나타내고 평판이 높아집니다.</div>
+      </div>
+      <div class="sihua-card">
+        <span class="sc-hanja" style="color: rgba(139,26,26,0.8);">忌</span>
+        <div class="sc-name">화기 (化忌)</div>
+        <span class="sc-en">Obstacle</span>
+        <div class="sc-desc">장애와 집착의 에너지. 어려움이 따르지만 올바른 방향 전환의 신호가 되기도 합니다.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 후기 -->
+<section class="sample-section">
+  <div class="container">
+    <span class="section-label">Client Stories</span>
+    <h2 class="section-title">명반 분석 후기</h2>
+    <p class="section-desc">구체적인 질문을 던질수록, 자미두수는 더 깊이 있는 답을 내놓습니다.</p>
+
+    <div class="sample-cards">
+      <div class="sample-card">
+        <div class="sc-quote">"</div>
+        <div class="sc-text">사주를 몇 번 봐도 직업 방향이 명확하지 않았는데, 자미두수로 관록궁을 분석하고 나서야 제가 왜 창업에 끌리는지 이해했습니다. 살성이 오히려 강한 추진력이 된다는 해석이 인상적이었어요.</div>
+        <div class="sc-profile">
+          <div class="sc-avatar">김</div>
+          <div class="sc-name-txt">김○○ · 35세 · 스타트업 창업자</div>
+        </div>
+      </div>
+      <div class="sample-card">
+        <div class="sc-quote">"</div>
+        <div class="sc-text">올해 이직 타이밍을 물어봤는데 대운과 유년이 맞물리는 시기를 정확히 짚어주셔서 깜짝 놀랐습니다. 막연한 불안감 대신 구체적인 준비 방향을 얻었어요.</div>
+        <div class="sc-profile">
+          <div class="sc-avatar">이</div>
+          <div class="sc-name-txt">이○○ · 29세 · 마케터</div>
+        </div>
+      </div>
+      <div class="sample-card">
+        <div class="sc-quote">"</div>
+        <div class="sc-text">부처궁에 어떤 별이 있는지 보고 제 연애 패턴을 완전히 이해했습니다. 왜 특정 유형에 끌리는지, 어떤 시기에 인연이 오는지 시각적으로 명확하게 보여줘서 좋았어요.</div>
+        <div class="sc-profile">
+          <div class="sc-avatar">박</div>
+          <div class="sc-name-txt">박○○ · 32세 · 디자이너</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="cta">
+  <div class="cta-content">
+    <span class="section-label" style="display:block; margin-bottom: 1rem;">Begin Your Reading</span>
+    <h2 class="cta-title">당신의 별을 찾아드립니다</h2>
+    <p class="cta-sub">생년월일시만 알면 됩니다.<br>108개의 별이 당신의 이야기를 기다리고 있습니다.</p>
+    <div class="cta-group">
+      <a href="#" class="hero-cta" style="opacity:1; animation:none;">명반 분석 신청하기 →</a>
+      <a href="#" class="hero-cta-secondary" style="opacity:1; animation:none;">샘플 명반 보기</a>
+    </div>
+    <p style="margin-top: 2rem; font-size: 0.78rem; color: rgba(240,222,160,0.3); font-family: 'Noto Serif KR', serif; letter-spacing: 0.05em;">
+      분석 결과는 참고 자료로만 활용하시기 바랍니다 · 상담 내용은 비밀이 보장됩니다
+    </p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">紫微斗數 명반 해석</div>
+  <p class="footer-copy">
+    별이 말하는 당신의 이야기 · Zi Wei Dou Shu Reading Service<br>
+    © 2025 · 자미두수 명반 해석 · 모든 해석은 참고 자료입니다
+  </p>
+</footer>
+
+<script>
+  // 별 생성
+  const sf = document.getElementById('starfield');
+  for (let i = 0; i < 120; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const size = Math.random() * 2 + 0.5;
+    const opLo = (Math.random() * 0.3 + 0.1).toFixed(2);
+    const opHi = (Math.random() * 0.5 + 0.3).toFixed(2);
+    const dur  = (Math.random() * 4 + 2).toFixed(1) + 's';
+    s.style.cssText = `
+      width:${size}px; height:${size}px;
+      top:${Math.random()*100}%;
+      left:${Math.random()*100}%;
+      --op-lo:${opLo}; --op-hi:${opHi}; --dur:${dur};
+      animation-delay:${(Math.random()*4).toFixed(1)}s;
+    `;
+    sf.appendChild(s);
+  }
+
+  // 스크롤 nav
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // 부드러운 스크롤
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
+    });
+  });
+</script>
+</body>
+</html>
