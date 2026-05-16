@@ -178,11 +178,13 @@ const ZIWEI_DATA = {
     "亥":"亥","卯":"亥","未":"亥",  // 해묘미년 해궁 - 실제로는
     "巳":"巳","酉":"巳","丑":"巳"   // 사유축년 사궁
   },
+  // 천마 위치표 (생년 지지 기준)
+  // 申子辰→寅(2), 亥卯未→巳(5), 寅午戌→申(8), 巳酉丑→亥(11)
   TIANMA_POSITION: {
-    "寅":6,"午":6,"戌":6,
-    "申":0,"子":0,"辰":0,
-    "亥":9,"卯":9,"未":9,
-    "巳":3,"酉":3,"丑":3
+    "寅":8,"午":8,"戌":8,
+    "申":2,"子":2,"辰":2,
+    "亥":5,"卯":5,"未":5,
+    "巳":11,"酉":11,"丑":11
   },
 
   // 록존 위치표 (생년 천간 기준)
@@ -379,14 +381,15 @@ class ZiweiEngine {
   _placeMainStars(ziweiPos) {
     const stars = Array.from({length: 12}, () => []);
     
-    // 자미계열 (자미에서 순행)
+    // 자미계열 (역행 배치, 순행 offset 기준)
+    // 자미=0, 천기=-1(+11), 태양=-3(+9), 무곡=-4(+8), 천동=-5(+7), 염정=-8(+4)
     const ziweiGroup = [
       {name:"紫微", kr:"자미", offset:0},
-      {name:"天機", kr:"천기", offset:-1},
-      {name:"太陽", kr:"태양", offset:-2},  // 실제로는 태양은 다른 위치
-      {name:"武曲", kr:"무곡", offset:1},
-      {name:"天同", kr:"천동", offset:2},
-      {name:"廉貞", kr:"염정", offset:4},
+      {name:"天機", kr:"천기", offset:11},  // -1
+      {name:"太陽", kr:"태양", offset:9},   // -3
+      {name:"武曲", kr:"무곡", offset:8},   // -4
+      {name:"天同", kr:"천동", offset:7},   // -5
+      {name:"廉貞", kr:"염정", offset:4},   // -8
     ];
     
     // 천부계열 (천부에서 순행)
@@ -417,10 +420,10 @@ class ZiweiEngine {
   }
 
   _getTianfuPosition(ziweiPos) {
-    // 천부는 자미와 대칭 관계
-    // 자-인: 천부=술, 자-묘: 천부=유 등
-    const tianfuMap = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 11];
-    return tianfuMap[ziweiPos] !== undefined ? tianfuMap[ziweiPos] : (12 - ziweiPos) % 12;
+    // 천부 위치 공식: (자미 + 천부) % 12 = 4
+    // 천부 = (4 - 자미 + 12) % 12
+    // 검증: 자미戌(10) → 천부午(6): (10+6)%12=4 ✓
+    return (4 - ziweiPos + 12) % 12;
   }
 
   _placeMinorStars(yearSB, lunarMonth, birthHour) {
@@ -428,11 +431,13 @@ class ZiweiEngine {
     const hourIdx = this.getHourIndex(birthHour);
     const branchIdx = ZIWEI_DATA.EARTHLY_BRANCHES.indexOf(yearSB.branch);
     
-    // 좌보 (음력 월 기준, 인월부터 순행)
-    const zuofuPos = (2 + (lunarMonth - 1)) % 12;
+    // 좌보 (진=4에서 순행, 월기준)
+    // 검증: 음력7월 → (4+7-1)%12=10(戌) ✓
+    const zuofuPos = (4 + (lunarMonth - 1)) % 12;
     stars[zuofuPos].push({name:"左輔", kr:"좌보", category:"auspicious", color:"#7eb8d4"});
     
-    // 우필 (음력 월 기준, 술월부터 역행)
+    // 우필 (술월=10에서 역행)
+    // 검증: 음력7월 → (10-(7-1)+12)%12=4(辰) ✓
     const youbiPos = (10 - (lunarMonth - 1) + 12) % 12;
     stars[youbiPos].push({name:"右弼", kr:"우필", category:"auspicious", color:"#7eb8d4"});
     
@@ -464,8 +469,8 @@ class ZiweiEngine {
     const tuoluoPos = (luzunPos - 1 + 12) % 12;
     stars[tuoluoPos].push({name:"陀羅", kr:"타라", category:"inauspicious", color:"#d47e7e"});
     
-    // 천마 (생년 지지 기준)
-    const tianmaPos = ZIWEI_DATA.TIANMA_POSITION[yearSB.branch] || 6;
+    // 천마 (생년 지지 기준): 申子辰→寅(2), 亥卯未→巳(5), 寅午戌→申(8), 巳酉丑→亥(11)
+    const tianmaPos = {"寅":8,"午":8,"戌":8,"申":2,"子":2,"辰":2,"亥":5,"卯":5,"未":5,"巳":11,"酉":11,"丑":11}[yearSB.branch] || 8;
     stars[tianmaPos].push({name:"天馬", kr:"천마", category:"auspicious", color:"#7eb8d4"});
     
     // 화성 (생년 지지 + 생시)
@@ -474,7 +479,8 @@ class ZiweiEngine {
     stars[huoxingPos].push({name:"火星", kr:"화성", category:"inauspicious", color:"#d47e7e"});
     
     // 영성 (생년 지지 + 생시)
-    const lingxingBase = {"寅":11,"午":11,"戌":11,"申":5,"子":5,"辰":5,"亥":0,"卯":0,"未":0,"巳":3,"酉":3,"丑":3}[yearSB.branch] || 0;
+    // 검증: 卯년,축시(hIdx=1) → lxBase["卯"]=10 → (10+1)%12=11(亥) ✓
+    const lingxingBase = {"寅":11,"午":11,"戌":11,"申":5,"子":5,"辰":5,"亥":10,"卯":10,"未":10,"巳":3,"酉":3,"丑":3}[yearSB.branch] || 0;
     const lingxingPos = (lingxingBase + hourIdx) % 12;
     stars[lingxingPos].push({name:"鈴星", kr:"영성", category:"inauspicious", color:"#d47e7e"});
     
