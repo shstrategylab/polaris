@@ -1230,6 +1230,50 @@
     border-color: #7ab8e8;
     color: #d0eaff;
   }
+  .prompt-step-wrap.step3 {
+    border-top: 1px solid rgba(100,200,140,0.2);
+    background: rgba(20,80,50,0.08);
+    margin: 0 -28px;
+    padding: 22px 28px 26px;
+  }
+  .step3-badge {
+    background: linear-gradient(135deg, #1e7a4a, #0d4a28);
+    color: #c0f0d8;
+  }
+  .prompt-step-wrap.step3 .prompt-step-title { color: #88d8b0; }
+  .prompt-step-wrap.step3 .prompt-step-desc strong { color: #88d8b0; }
+  .btn-copy-prompt.step3-btn {
+    background: linear-gradient(135deg, rgba(26,122,74,0.28), rgba(26,122,74,0.10));
+    border-color: rgba(80,200,130,0.45);
+    color: #88d8b0;
+  }
+  .btn-copy-prompt.step3-btn:hover {
+    background: rgba(26,122,74,0.42);
+    border-color: #60c898;
+    color: #c0f0d8;
+  }
+  .prompt-step-wrap.step4 {
+    border-top: 1px solid rgba(180,100,220,0.2);
+    background: rgba(60,20,90,0.09);
+    margin: 0 -28px;
+    padding: 22px 28px 26px;
+  }
+  .step4-badge {
+    background: linear-gradient(135deg, #6a1aa8, #3d0a68);
+    color: #e0c0ff;
+  }
+  .prompt-step-wrap.step4 .prompt-step-title { color: #c898f8; }
+  .prompt-step-wrap.step4 .prompt-step-desc strong { color: #c898f8; }
+  .btn-copy-prompt.step4-btn {
+    background: linear-gradient(135deg, rgba(106,26,168,0.28), rgba(106,26,168,0.10));
+    border-color: rgba(170,80,220,0.45);
+    color: #c898f8;
+  }
+  .btn-copy-prompt.step4-btn:hover {
+    background: rgba(106,26,168,0.42);
+    border-color: #b060e8;
+    color: #e0c0ff;
+  }
   .copy-feedback {
     margin-top: 10px;
     color: #80e0b8;
@@ -1557,6 +1601,36 @@
           🃏 &nbsp; 2단계 · 카드형 변환 프롬프트 복사
         </button>
         <div class="copy-feedback" id="copy-feedback-card" style="display:none">✓ 복사되었습니다!</div>
+      </div>
+
+      <!-- STEP 3: 운명 포트폴리오 상세 풀이 -->
+      <div class="prompt-step-wrap step3">
+        <div class="prompt-step-badge step3-badge">STEP 3</div>
+        <div class="prompt-step-title">운명 포트폴리오 상세 풀이</div>
+        <div class="prompt-step-desc">
+          STEP 1 풀이를 받은 <strong>같은 대화창</strong>에서 이어서 붙여넣으세요.<br>
+          12궁 각각의 운명 영역(재물·직업·건강·관계 등)을<strong> 포트폴리오 형식의 카드 HTML</strong>로 상세 출력합니다.<br>
+          이미지의 <strong>[무곡] 성취형, [탐랑] 수완형</strong> 같은 궁별 유형·키워드·조언까지 포함됩니다.
+        </div>
+        <button class="btn-copy-prompt step3-btn" onclick="copyPortfolioPrompt()">
+          🗂️ &nbsp; 3단계 · 운명 포트폴리오 풀이 프롬프트 복사
+        </button>
+        <div class="copy-feedback" id="copy-feedback-portfolio" style="display:none">✓ 복사되었습니다!</div>
+      </div>
+
+      <!-- STEP 4: 인물의 특성 카드 -->
+      <div class="prompt-step-wrap step4">
+        <div class="prompt-step-badge step4-badge">STEP 4</div>
+        <div class="prompt-step-title">인물의 특성 카드 생성</div>
+        <div class="prompt-step-desc">
+          STEP 1 풀이가 있는 <strong>같은 대화창</strong>에서 이어서 붙여넣으세요.<br>
+          명반에서 도출된 <strong>9가지 핵심 인물 특성</strong>을 3×3 카드 그리드 HTML로 출력합니다.<br>
+          <strong>목표의식·창조력·수완·영업력</strong> 등 강점과 주의점을 한눈에 시각화합니다.
+        </div>
+        <button class="btn-copy-prompt step4-btn" onclick="copyCharPrompt()">
+          🪬 &nbsp; 4단계 · 인물 특성 카드 프롬프트 복사
+        </button>
+        <div class="copy-feedback" id="copy-feedback-char" style="display:none">✓ 복사되었습니다!</div>
       </div>
 
     </div>
@@ -3409,6 +3483,143 @@ function copyCardPrompt() {
       document.execCommand('copy');
       document.body.removeChild(ta);
       const fb = document.getElementById('copy-feedback-card');
+      fb.style.display = 'block';
+      setTimeout(() => fb.style.display = 'none', 3000);
+    });
+  };
+  doCopy(prompt);
+}
+
+// ── STEP 3: 운명 포트폴리오 상세 풀이 프롬프트 ──
+function copyPortfolioPrompt() {
+  const data = window._chartData;
+  const name = data ? (data.personName || '의뢰인') : '의뢰인';
+
+  const prompt = `위의 자미두수 명반 풀이를 바탕으로, ${name}의 【운명 포트폴리오】를 시각적으로 아름다운 단일 HTML 카드 파일로 만들어 주세요.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+【 운명 포트폴리오 요구사항 】
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+① 헤더 배너 (전체 너비)
+   - 제목: "運命 포트폴리오 — ${name}"
+   - 부제: 이 명반의 핵심 유형 두 단어 (예: "무곡 탐랑 · 흥행가형")
+   - 한 줄 설명: 실천과 욕망, 사업수완 등 핵심 에너지 요약
+
+② 12궁 포트폴리오 카드 (4열 3행 그리드, 각 궁 1장)
+   아래 12개 궁을 각각 카드로 출력하세요:
+   [자기자신·명궁], [형제친구], [애정부부], [자녀후배],
+   [금전수익], [신체건강], [사회활동], [인간관계],
+   [직업성공], [주거환경], [정신행복], [부모선배]
+
+   각 카드 구성:
+   - 궁 이름 (한자 · 한글) + 해당 궁의 지지(地支) 표시
+   - 주성 유형 라벨: [성명] + 유형명 (예: [무곡] 성취형)
+   - 조성 유형 라벨: 보조성 1~2개 + 유형명 (예: [탐랑] 수완형)
+   - 이 궁이 나타내는 삶의 영역 키워드 2~3개 (태그 형식)
+   - 이 궁의 별자리 조합이 주는 운명적 특징 2문장
+   - 주의점 또는 강화 조언 1문장
+   - 길흉 게이지 (★☆ 5점 척도, 해당 궁의 별 조합 기준)
+
+③ 현재 운정 별도 카드 (전체 너비)
+   - 현재 대한궁 + 소한궁 + 유년 태세 정보 시각화
+   - 올해 가장 활성화되는 궁과 주의 궁 강조
+
+④ 디자인
+   - 배경: 짙은 남색 (#0d1b2a) + 별 패턴 (::after CSS)
+   - 카드: 반투명 다크 배경 + 궁별 테마 컬러 상단 라인
+   - 폰트: Noto Serif KR (Google Fonts CDN)
+   - 카드 호버: 살짝 위로 올라오는 효과 (translateY -4px)
+   - 완전한 단일 HTML 파일 (외부 의존 없이 Google Fonts만 허용)
+
+⑤ 궁별 테마 컬러 가이드
+   명궁=금(#c8943a), 재백궁=초록(#2e7d5e), 관록궁=청(#1a4a7a),
+   부처궁=장미(#c0394a), 복덕궁=보라(#5a2d8a), 전택궁=갈(#7a4a1a),
+   나머지=은(#4a5a6a)
+
+하단 안내: "이 포트폴리오는 자미두수(紫微斗數) 전통 명리학을 기반으로 한 참고 자료입니다."`;
+
+  const doCopy = (text) => {
+    navigator.clipboard.writeText(text).then(() => {
+      const fb = document.getElementById('copy-feedback-portfolio');
+      fb.style.display = 'block';
+      setTimeout(() => fb.style.display = 'none', 3000);
+    }).catch(() => {
+      const ta = document.createElement('textarea');
+      ta.value = text; document.body.appendChild(ta);
+      ta.select(); document.execCommand('copy');
+      document.body.removeChild(ta);
+      const fb = document.getElementById('copy-feedback-portfolio');
+      fb.style.display = 'block';
+      setTimeout(() => fb.style.display = 'none', 3000);
+    });
+  };
+  doCopy(prompt);
+}
+
+// ── STEP 4: 인물의 특성 카드 프롬프트 ──
+function copyCharPrompt() {
+  const data = window._chartData;
+  const name = data ? (data.personName || '의뢰인') : '의뢰인';
+
+  const prompt = `위의 자미두수 명반 풀이를 바탕으로, ${name}의 【인물의 특성】을 3×3 카드 그리드 HTML로 만들어 주세요.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+【 인물의 특성 카드 요구사항 】
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+① 헤더
+   - 제목: "인물의 특성 — ${name}"
+   - 별 아이콘(✦) 포함, 금베이지 배경 라인
+   - 부제: 이 명반에서 가장 두드러지는 기질 한 줄 요약
+
+② 3×3 특성 카드 그리드 (총 9칸)
+   - 가운데(5번째) 칸: "인물의 특성" 타이틀 칸 (강조 디자인)
+   - 나머지 8칸: 각각 이 명반에서 도출된 핵심 특성 키워드 1개
+
+   특성 도출 기준:
+   - 명궁 주성 → 타고난 기질 (예: 목표의식 확고, 창조력 개성강함)
+   - 재백·관록궁 → 재물·직업 특성 (예: 영업 마케팅 귀재, 사업수완)
+   - 부처·형제궁 → 대인·관계 특성 (예: 다방면에 팔방미인, 수완과 결단)
+   - 복덕·질액궁 → 심리·자아 특성 (예: 이미지 중시 매력추구, 자신을 과대평가)
+   - 화기 위치 → 주의 특성 (예: 남욕과 돈에 애착)
+
+   각 특성 칸 구성:
+   - 짧은 핵심 키워드 (10자 이내, 굵게)
+   - 키워드 톤: 강점은 파랑/초록 계열, 주의점은 주황/적 계열
+
+③ 추가 상세 해설 섹션 (카드 아래)
+   각 8개 특성에 대해:
+   - 특성명 + 어떤 별자리 조합에서 나왔는지 출처 명시
+   - 이 특성이 실제 삶에서 어떻게 발현되는지 2~3문장 상세 해설
+   - 이 특성을 강점으로 활용하는 조언 1문장
+
+④ 디자인 스타일
+   - 헤더: 베이지/샌드 계열 배경 (#f0e6d0), 금색 타이틀
+   - 카드 그리드: 흰 배경 + 테두리 라인 (엑셀 표 느낌, 깔끔)
+   - 중앙 타이틀 칸: 짙은 남색 배경, 흰 텍스트, 굵게
+   - 강점 특성 칸: 짙은 파랑 텍스트 (#2a3a8a)
+   - 주의 특성 칸: 보라/적 계열 텍스트 (#6a1a6a)
+   - 폰트: Noto Serif KR (Google Fonts CDN)
+   - 완전한 단일 HTML 파일
+
+⑤ 하단 안내
+   "이 풀이는 자미두수(紫微斗數) 전통 명리학을 기반으로 한 참고 자료입니다."
+
+※ 위 이미지처럼 3×3 격자형 테이블 구조로, 중앙에 "인물의 특성" 타이틀이 오게 배치해 주세요.
+각 특성은 명반 데이터에서 실제로 도출된 것이어야 하며, 단순 일반론이 아닌 이 명반에 특화된 표현을 써주세요.`;
+
+  const doCopy = (text) => {
+    navigator.clipboard.writeText(text).then(() => {
+      const fb = document.getElementById('copy-feedback-char');
+      fb.style.display = 'block';
+      setTimeout(() => fb.style.display = 'none', 3000);
+    }).catch(() => {
+      const ta = document.createElement('textarea');
+      ta.value = text; document.body.appendChild(ta);
+      ta.select(); document.execCommand('copy');
+      document.body.removeChild(ta);
+      const fb = document.getElementById('copy-feedback-char');
       fb.style.display = 'block';
       setTimeout(() => fb.style.display = 'none', 3000);
     });
